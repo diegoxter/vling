@@ -16,6 +16,15 @@ fn main() {
 	camera.fovy = f32(60.0)
 	camera.projection = int(r.CameraProjection.camera_perspective)
 
+	// Animations
+	filepath :="assets/Rogue.gltf"
+	model := r.load_model(filepath)
+	// mut anims := &r.ModelAnimation{};
+	// anim_count := 0;
+	// anims = r.load_model_animations(filepath, &anim_count);
+	// mut current_frame := 0;
+	//
+
 	mut camera_mode := r.CameraMode.camera_first_person
 
 	mut heights := [max_columns]f32{}
@@ -33,6 +42,7 @@ fn main() {
 		i++
 	}
 
+	// TODO disable this on prod
 	r.enable_cursor()
 	r.set_target_fps(60)
 
@@ -46,6 +56,17 @@ fn main() {
 			camera_mode = r.CameraMode.camera_third_person
 			camera.up = r.Vector3{f32(0.0), f32(1.0), f32(0.0)}
 		}
+
+			 // if r.is_key_pressed(int(r.KeyboardKey.key_space))
+			 //     {
+			 //         current_frame++;
+			 //         unsafe {
+			 // 			r.update_model_animation(model, anims[0], current_frame)
+			 // 			if current_frame >= anims[0].frame_count {
+			 // 				current_frame = 0
+			 // 			}
+			 // 		}
+			 //     }
 
 		r.update_camera(&camera, int(camera_mode))
 
@@ -76,6 +97,13 @@ fn main() {
 			r.draw_cube_wires(camera.target, f32(0.5), f32(0.5), f32(0.5), r.darkpurple)
 		}
 
+			r.draw_model(
+				model,
+				r.Vector3{f32(0.0), f32(0), f32(0.0)},
+				f32(1),
+				r.white
+			)
+
 		r.end_mode_3d()
 
 		// r.draw_text("Haha!", 190, 200, 20, r.lightgray)
@@ -83,5 +111,7 @@ fn main() {
 		r.end_drawing()
 	}
 
+	r.unload_model(model)
+	// r.unload_model_animations(anims, anim_count)
 	r.close_window()
 }
